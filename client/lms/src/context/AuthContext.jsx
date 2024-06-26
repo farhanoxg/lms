@@ -11,7 +11,7 @@ export const AuthContextProvider = ({ children }) => {
   const location = useLocation();
 
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   useEffect(() => {
     checkUserLoggedIn();
@@ -21,8 +21,8 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        if (!["/login", "/register"].includes(location.pathname)) {
-          navigate("/login", { replace: true });
+        if (!["/", "/register"].includes(location.pathname)) {
+          navigate("/", { replace: true });
         }
         return;
       }
@@ -31,22 +31,22 @@ export const AuthContextProvider = ({ children }) => {
       if (!storedUser) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login", { replace: true });
+        navigate("/", { replace: true });
         return;
       }
 
       setUser(storedUser);
 
-      if (["/login", "/register"].includes(location.pathname)) {
+      if (["/", "/register"].includes(location.pathname)) {
         navigate(`/${storedUser}`, { replace: true });
       }
     } catch (err) {
       console.log(err);
-      setError(err);
+      // setError(err);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      if (!["/login", "/register"].includes(location.pathname)) {
-        navigate("/login", { replace: true });
+      if (!["/", "/register"].includes(location.pathname)) {
+        navigate("/", { replace: true });
       }
     }
   };
@@ -67,10 +67,11 @@ export const AuthContextProvider = ({ children }) => {
       });
 
       const result = await res.json();
+      console.log({LoginResult:result});
+
       if (res.ok) {
         localStorage.setItem("token", result.token);
         localStorage.setItem("user", result.user.role);
-        console.log(result.user.role);
 
         setUser(result.user.role);
 
@@ -98,9 +99,10 @@ export const AuthContextProvider = ({ children }) => {
       });
 
       const result = await res.json();
+      console.log({registerResult:result});
       if (res.ok) {
         toast.success("User registered successfully! Please log in.");
-        navigate("/login", { replace: true });
+        navigate("/", { replace: true });
       } else {
         throw new Error(result.error || "Registration failed");
       }
@@ -118,7 +120,7 @@ export const AuthContextProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setUser(null);
-      navigate("/login", { replace: true });
+      navigate("/", { replace: true });
       toast.success("Logged out successfully");
     } catch (err) {
       console.error(err);

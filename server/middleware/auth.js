@@ -7,7 +7,7 @@ const auth = (role) => {
     const token = req.cookies.token;
 
     if (!token) {
-      return res.status(401).json({ msg: 'plz login first as admin' });
+      return res.status(401).json({ msg: 'plz login first ' });
     }
 
     try {

@@ -3,17 +3,24 @@ import { Navigate, Outlet } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 const ProtectedRoute = ({ role }) => {
-  const { user } = useContext(AuthContext);
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("user");
+  const {user}=useContext(AuthContext)
+  console.log("authcontext user", user);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (!token || !userRole) {
+    return <Navigate to="/" replace />;
   }
 
-  if (role !== user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (role == user && role == userRole) {
+    return <Outlet />;
+}
+ else if (role == user && role==userRole) {
+    return <Outlet />;
+}
 
-  return <Outlet />;
+// return <Navigate to={`$/{role}`} />
+ 
 };
 
 export default ProtectedRoute;

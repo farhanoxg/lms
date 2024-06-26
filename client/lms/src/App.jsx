@@ -1,13 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ToastContextProvider } from "./context/ToastContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AdminPage from "./pages/AdminPage";
-import StudentPage from "./pages/StudentPage";
-import HomePage from "./pages/HomePage";
+import AdminProfile from "./components/AdminProfile";
+import StudentProfile from "./components/StudentProfile";
 
 function App() {
   return (
@@ -15,17 +14,15 @@ function App() {
       <Router>
         <AuthContextProvider>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route element={<ProtectedRoute role="admin" />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/" element={<HomePage />} />
-
+              <Route path="/admin" element={<AdminProfile />} />
             </Route>
             <Route element={<ProtectedRoute role="student" />}>
-              <Route path="/student" element={<StudentPage />} />
-            <Route path="/" element={<HomePage />} />
+              <Route path="/student" element={<StudentProfile />} />
             </Route>
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </AuthContextProvider>
       </Router>
