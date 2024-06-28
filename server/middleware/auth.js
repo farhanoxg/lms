@@ -4,7 +4,7 @@ const { JWT_SECRET } = process.env;
 
 const auth = (role) => {
   return async (req, res, next) => {
-    const token = req.cookies.token;
+    const token = req.headers.authorization.substr(7);
 
     if (!token) {
       return res.status(401).json({ msg: 'plz login first ' });
